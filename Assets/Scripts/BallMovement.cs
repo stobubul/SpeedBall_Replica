@@ -53,7 +53,7 @@ public class BallMovement : MonoBehaviour
             Debug.Log("Sol oka basıldı.");
 
             //transform.position = new Vector3(transform.position.x, transform.position.y, -0.5f);
-            GetComponent<Rigidbody>().AddForce(Vector3.back * 4.5f, ForceMode.Impulse);
+            GetComponent<Rigidbody>().AddForce(Vector3.back * 10f, ForceMode.Impulse);
         }
         
         if (Input.GetKeyDown(KeyCode.RightArrow) && Speed != 0)
@@ -61,7 +61,7 @@ public class BallMovement : MonoBehaviour
             Debug.Log("Sağ oka basıldı.");
             
             //transform.position = new Vector3(transform.position.x, transform.position.y, 0.5f);
-            GetComponent<Rigidbody>().AddForce(Vector3.forward * 4.5f, ForceMode.Impulse);
+            GetComponent<Rigidbody>().AddForce(Vector3.forward * 10f, ForceMode.Impulse);
         }
 
         // Zıplama işlemi için upArrow tuşuna basılırsa Jump() fonksiyonunu çağır
@@ -88,14 +88,11 @@ public class BallMovement : MonoBehaviour
             finishText.SetActive(true); //OYUN BİTİNCEKİ YAZI
         }
     }
-
-    // Karakteri zıplatma fonksiyonu
+    
     void Jump()
     {
-        // Eğer karakter zaten havadaysa, zıplama işlemi yapılmaz
         if (IsGrounded())
         {
-            // Karaktere yukarı doğru bir kuvvet uygula
             GetComponent<Rigidbody>().AddForce(Vector3.up * 4.5f, ForceMode.Impulse);
         }
     }
