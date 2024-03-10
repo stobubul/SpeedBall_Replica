@@ -6,9 +6,10 @@ using TMPro;
 public class StartGame : MonoBehaviour
 {
     public GameObject pressAnyKeyToStartText;
-    
+    public GameObject scoreText;
     public GameObject countdownTextObject;
     public TextMeshProUGUI countdownText;
+    
     private float countdownDuration = 3f;
     public float countdownMessageDuration = 0.5f; // 3 2 1 mesajının ekranda kalacağı süre
     public float goMessageDuration = 0.5f; // Go mesajının ekranda kalacağı süre
@@ -20,6 +21,8 @@ public class StartGame : MonoBehaviour
     {
         GetComponent<BallMovement>().enabled = false;
         countdownTextObject.SetActive(false);
+        scoreText.SetActive(false);
+        pressAnyKeyToStartText.SetActive(true);
     }
 
     // Update is called once per frame
@@ -68,5 +71,6 @@ public class StartGame : MonoBehaviour
         
         GetComponent<BallMovement>().enabled = true;
         countdownTextObject.SetActive(false);
+        scoreText.SetActive(true);
     }
 }

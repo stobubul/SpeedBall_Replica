@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class BallMovement : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class BallMovement : MonoBehaviour
     public GameObject deadText;
     public GameObject finishText;
     public GameObject scoreText;
+    public GameObject pressAnyKeyToRestartText;
 
     public Rigidbody rb;
     
@@ -29,6 +31,7 @@ public class BallMovement : MonoBehaviour
     {
         deadText.SetActive(false);
         finishText.SetActive(false);
+        pressAnyKeyToRestartText.SetActive(false);
 
         rb = GetComponent<Rigidbody>();
         
@@ -69,6 +72,12 @@ public class BallMovement : MonoBehaviour
         {
             Jump();
         }
+        
+        // Oyunu öldüğünde yeniden başlatmak için
+        if (Input.anyKeyDown && Speed == 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -78,6 +87,7 @@ public class BallMovement : MonoBehaviour
             
             Speed = 0; //Çarpışınca öldürecek kod.
             deadText.SetActive(true); //ÖLÜNCE ZORTLADIN YAZISI
+            pressAnyKeyToRestartText.SetActive(true);
         }
         
         if (collision.collider.tag == "Finish")
@@ -86,6 +96,7 @@ public class BallMovement : MonoBehaviour
             
             Speed = 0; //Oyun bitince duracak.
             finishText.SetActive(true); //OYUN BİTİNCEKİ YAZI
+            pressAnyKeyToRestartText.SetActive(true);
         }
     }
     
