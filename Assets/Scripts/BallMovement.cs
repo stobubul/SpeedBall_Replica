@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BallMovement : MonoBehaviour
 {
@@ -12,12 +13,27 @@ public class BallMovement : MonoBehaviour
     public GameObject finishText;
     public GameObject scoreText;
 
+    public Rigidbody rb;
+    
+    public float jumpForce = 5f; // Zıplama kuvveti
+    public float groundCheckDistance = 0.2f; // Zemin kontrol mesafesi
+    public LayerMask groundMask; // Zemin katmanı
+    private bool isGrounded; // Karakterin zeminde olup olmadığını belirten değişken
+
     private int score = 0;
+    
+    public SphereCollider groundCollider; // SphereCollider kullanarak zemin temasını kontrol etmek için
+    
     // Start is called before the first frame update
     void Start()
     {
         deadText.SetActive(false);
         finishText.SetActive(false);
+
+        rb = GetComponent<Rigidbody>();
+        
+        // SphereCollider bileşenini al
+        groundCollider = GetComponent<SphereCollider>();
     }
 
     // Update is called once per frame
@@ -36,17 +52,24 @@ public class BallMovement : MonoBehaviour
         {
             Debug.Log("Sol oka basıldı.");
 
-            transform.position = new Vector3(transform.position.x, transform.position.y, -0.5f);
+            //transform.position = new Vector3(transform.position.x, transform.position.y, -0.5f);
+            GetComponent<Rigidbody>().AddForce(Vector3.back * 4.5f, ForceMode.Impulse);
         }
         
         if (Input.GetKeyDown(KeyCode.RightArrow) && Speed != 0)
         {
             Debug.Log("Sağ oka basıldı.");
             
-            transform.position = new Vector3(transform.position.x, transform.position.y, 0.5f);
+            //transform.position = new Vector3(transform.position.x, transform.position.y, 0.5f);
+            GetComponent<Rigidbody>().AddForce(Vector3.forward * 4.5f, ForceMode.Impulse);
+        }
+
+        // Zıplama işlemi için upArrow tuşuna basılırsa Jump() fonksiyonunu çağır
+        if (Input.GetKeyDown(KeyCode.UpArrow) && Speed != 0)
+        {
+            Jump();
         }
     }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.tag == "Obstacle")
@@ -65,5 +88,26 @@ public class BallMovement : MonoBehaviour
             finishText.SetActive(true); //OYUN BİTİNCEKİ YAZI
         }
     }
-    
+
+    // Karakteri zıplatma fonksiyonu
+    void Jump()
+    {
+        // Eğer karakter zaten havadaysa, zıplama işlemi yapılmaz
+        if (IsGrounded())
+        {
+            // Karaktere yukarı doğru bir kuvvet uygula
+            GetComponent<Rigidbody>().AddForce(Vector3.up * 4.5f, ForceMode.Impulse);
+        }
+    }
+
+    // SphereCollider kullanarak zemin temasını kontrol etmek için
+    bool IsGrounded()
+    {
+        float radius = groundCollider.radius * transform.localScale.y; // Kürenin yarıçapı
+        float distanceToGround = radius + 0.1f; // Zemin ile karakterin altı arasındaki mesafe
+
+        // Kürenin merkeziyle zemin arasında bir ışın fırlat
+        RaycastHit hit;
+        return Physics.Raycast(transform.position, Vector3.down, out hit, distanceToGround);
+    }
 }

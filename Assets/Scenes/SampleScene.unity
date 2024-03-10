@@ -556,6 +556,12 @@ MonoBehaviour:
   deadText: {fileID: 1352472696}
   finishText: {fileID: 483256791}
   scoreText: {fileID: 421113839}
+  rb: {fileID: 0}
+  jumpForce: 5
+  groundCheckDistance: 0.2
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!54 &368343195
 Rigidbody:
   m_ObjectHideFlags: 0
